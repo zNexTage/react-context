@@ -12,14 +12,15 @@ const Router = () => {
     return (
         <BrowserRouter>
             <Switch>
-                <Route exact path={'/'}>
-                    <UserProvider>
+                {/* Provide context for login and feira pages */}
+                <UserProvider>
+                    <Route exact path={'/'}>
                         <Login />
-                    </UserProvider>
-                </Route>
-                <Route path={'/feira'}>
-                    <Feira />
-                </Route>
+                    </Route>
+                    <Route path={'/feira'}>
+                        <Feira />
+                    </Route>
+                </UserProvider>
                 <Route path={'/carrinho'}>
                     <Carrinho />
                 </Route>
