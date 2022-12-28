@@ -1,9 +1,9 @@
 import { Container } from './styles';
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { CartContext } from 'commom/context/cart';
+import { useCartContext } from 'commom/context/cart';
 
 
 function Produto({
@@ -13,35 +13,9 @@ function Produto({
   value,
   unity
 }) {
-  const { cart, setCart } = useContext(CartContext);
+  const { handleAddItem, getProduct } = useCartContext();
 
-  /**
-   * Add an item to the cart or, if the item is already in the cart, increase the 
-   * quantity of this product;
-   * @param {*} newProduct 
-   * @returns 
-   */
-  const handleAddItem = (newProduct) => {    
-    const isCartItem = cart.some(cartItem => cartItem.id === newProduct.id);
-
-    //the item is not in the cart?
-    if (!isCartItem) {
-      newProduct.quantity = 1;
-      setCart([...cart, { ...newProduct }]);
-      return;
-    }
-
-    // the item is already in the cart; we must increase the quantity.
-    setCart(
-      cart => cart.map((cartItem) => {
-        if (cartItem.id === newProduct.id) {
-          cartItem.quantity += 1;
-        }
-
-        return cartItem;
-      })
-    )
-  }
+  const product = getProduct(id);
 
   return (
     <Container>
@@ -60,6 +34,7 @@ function Produto({
         >
           <RemoveIcon />
         </IconButton>
+        {product?.quantity || 0}
         <IconButton onClick={() => handleAddItem({ id, name, photo, value, unity })}>
           <AddIcon />
         </IconButton>
