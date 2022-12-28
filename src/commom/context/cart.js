@@ -6,6 +6,11 @@ CartContext.displayName = 'Carrinho de compras';
 const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
 
+    /**
+     * About add functions here:
+     * Isso até pode economizar algumas linhas de código, porém, como citado acima, o Provider vai ter a responsabilidade de prover o contexto e de fazer manutenção no contexto! Não necessariamente colocar as funções no Provider vai estar sempre errado, pois nem sempre o nosso contexto será gigantesco, porém se o contexto começar a ficar muito complexo, você promete que vai criar um hook para poder separar a responsabilidade, beleza? ;)
+     */
+
     return (
         <CartContext.Provider value={{ cart, setCart }}>
             {children}
