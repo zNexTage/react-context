@@ -7,42 +7,61 @@ import {
 import {
   Input,
   InputLabel,
-  InputAdornment 
+  InputAdornment
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { UserContext } from 'commom/context/user';
 
-function Login() {
+function Login({ name, setName, balance, setBalance }) {
+  const history = useHistory();
+
   return (
     <Container>
-      <Titulo>
-        Insira o seu nome
-      </Titulo>
-      <InputContainer>
-        <InputLabel>
-          Nome
-        </InputLabel>
-        <Input
-          type="text"
-        />
-      </InputContainer>
-      <InputContainer>
-        <InputLabel>
-          Saldo
-        </InputLabel>
-        <Input
-        type="number"
-        startAdornment={
-          <InputAdornment position="start">
-            R$
-          </InputAdornment>
+      <UserContext.Consumer>
+        {
+          ({ name, setName, balance, setBalance }) => {
+            return (
+              <>
+                <Titulo>
+                  Insira o seu nome
+                </Titulo>
+                <InputContainer>
+                  <InputLabel>
+                    Nome
+                  </InputLabel>
+                  <Input
+                    value={name}
+                    onChange={event => setName && setName(event.target.value)}
+                    type="text"
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <InputLabel>
+                    Saldo
+                  </InputLabel>
+                  <Input
+                    type="number"
+                    value={balance}
+                    onChange={event => setBalance && setBalance(event.target.value)}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        R$
+                      </InputAdornment>
+                    }
+                  />
+                </InputContainer>
+                <Button
+                  onClick={() => history.push('/feira')}
+                  variant="contained"
+                  color="primary"
+                >
+                  Avançar
+                </Button>
+              </>
+            )
+          }
         }
-      />
-      </InputContainer>
-      <Button
-        variant="contained"
-        color="primary"
-      >
-        Avançar
-      </Button>
+      </UserContext.Consumer>
     </Container>
   )
 };
