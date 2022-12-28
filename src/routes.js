@@ -3,6 +3,7 @@ import Feira from 'pages/Feira';
 import Login from 'pages/Login';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { UserProvider } from 'commom/context/user';
+import { CartProvider } from 'commom/context/cart';
 
 /**
  * Application routes
@@ -17,9 +18,11 @@ const Router = () => {
                     <Route exact path={'/'}>
                         <Login />
                     </Route>
-                    <Route path={'/feira'}>
-                        <Feira />
-                    </Route>
+                    <CartProvider>
+                        <Route path={'/feira'}>
+                            <Feira />
+                        </Route>
+                    </CartProvider>
                 </UserProvider>
                 <Route path={'/carrinho'}>
                     <Carrinho />
