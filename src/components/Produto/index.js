@@ -13,7 +13,7 @@ function Produto({
   value,
   unity
 }) {
-  const { handleAddItem, getProduct } = useCartContext();
+  const { handleAddItem, handleRemoveItem, getProduct } = useCartContext();
 
   const product = getProduct(id);
 
@@ -31,11 +31,14 @@ function Produto({
       <div>
         <IconButton
           color="secondary"
+          onClick={() => handleRemoveItem(id)}
         >
           <RemoveIcon />
         </IconButton>
         {product?.quantity || 0}
-        <IconButton onClick={() => handleAddItem({ id, name, photo, value, unity })}>
+        <IconButton
+          color='primary'
+          onClick={() => handleAddItem({ id, name, photo, value, unity })}>
           <AddIcon />
         </IconButton>
       </div>
