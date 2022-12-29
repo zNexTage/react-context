@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const PaymentContext = createContext();
 PaymentContext.displayName = 'Pagamento';
@@ -41,7 +41,32 @@ const PaymentProvider = (({ children }) => {
     )
 });
 
+const usePaymentContext = () => {
+    const {
+        paymentTypes,
+        paymentForm,
+        setPaymentForm
+    } = useContext(PaymentContext);
+
+    const getPayment = paymentId => {
+        return paymentTypes.find((payment) => payment.id === paymentId);
+    }
+
+    const changePaymentForm = paymentId => {
+        const payment = getPayment(paymentId);
+
+        setPaymentForm(payment);
+    }
+
+    return {
+        paymentTypes,
+        paymentForm,
+        changePaymentForm
+    }
+}
+
 export {
     PaymentProvider,
-    PaymentContext
+    PaymentContext,
+    usePaymentContext
 }
