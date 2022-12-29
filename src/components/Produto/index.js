@@ -30,6 +30,7 @@ function Produto({
       </div>
       <div>
         <IconButton
+          disabled={!product}
           color="secondary"
           onClick={() => handleRemoveItem(id)}
         >
