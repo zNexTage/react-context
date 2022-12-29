@@ -22,11 +22,11 @@ const Router = () => {
                         <Route path={'/feira'}>
                             <Feira />
                         </Route>
+                        <Route path={'/carrinho'}>
+                            <Carrinho />
+                        </Route>
                     </CartProvider>
                 </UserProvider>
-                <Route path={'/carrinho'}>
-                    <Carrinho />
-                </Route>
             </Switch>
         </BrowserRouter>
     )
