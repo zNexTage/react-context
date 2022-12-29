@@ -4,6 +4,7 @@ import Login from 'pages/Login';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { UserProvider } from 'commom/context/user';
 import { CartProvider } from 'commom/context/cart';
+import { PaymentProvider } from 'commom/context/payment';
 
 /**
  * Application routes
@@ -22,9 +23,11 @@ const Router = () => {
                         <Route path={'/feira'}>
                             <Feira />
                         </Route>
-                        <Route path={'/carrinho'}>
-                            <Carrinho />
-                        </Route>
+                        <PaymentProvider>
+                            <Route path={'/carrinho'}>
+                                <Carrinho />
+                            </Route>
+                        </PaymentProvider>
                     </CartProvider>
                 </UserProvider>
             </Switch>
