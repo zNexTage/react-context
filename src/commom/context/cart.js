@@ -1,25 +1,26 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const CartContext = createContext();
 CartContext.displayName = 'Carrinho de compras';
 
 const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [totalQtd, setTotalQtd] = useState(0);
+
 
     /**
      * About add functions here:
-     * Isso até pode economizar algumas linhas de código, porém, como citado acima, o Provider vai ter a responsabilidade de prover o contexto e de fazer manutenção no contexto! Não necessariamente colocar as funções no Provider vai estar sempre errado, pois nem sempre o nosso contexto será gigantesco, porém se o contexto começar a ficar muito complexo, você promete que vai criar um hook para poder separar a responsabilidade, beleza? ;)
+     * > o Provider vai ter a responsabilidade de prover o contexto e de fazer manutenção no contexto! Não necessariamente colocar as funções no Provider vai estar sempre errado, pois nem sempre o nosso contexto será gigantesco, porém se o contexto começar a ficar muito complexo, você promete que vai criar um hook para poder separar a responsabilidade, beleza? ;)
      */
-
     return (
-        <CartContext.Provider value={{ cart, setCart }}>
+        <CartContext.Provider value={{ cart, setCart, totalQtd, setTotalQtd }}>
             {children}
         </CartContext.Provider>
     )
 };
 
 const useCartContext = () => {
-    const { cart, setCart } = useContext(CartContext);
+    const { cart, setCart, totalQtd, setTotalQtd } = useContext(CartContext);
 
     /**
    * Add an item to the cart or, if the item is already in the cart, increase the 
@@ -88,11 +89,24 @@ const useCartContext = () => {
         return setCart(changeQuantity(productId, -1));
     }
 
+    /**
+     * Calculate the quantity total of the items in cart.
+     */
+    useEffect(() => {
+        const totalQtd = cart.reduce((qtd, item) => {
+            return qtd + item.quantity;
+        }, 0);
+
+        setTotalQtd(totalQtd);
+    }, [cart, setTotalQtd]);
+
+
     return {
         cart,
         setCart,
         getProduct,
         handleAddItem,
+        totalQtd,
         handleRemoveItem
     }
 }
