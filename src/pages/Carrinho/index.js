@@ -11,7 +11,7 @@ import { Container, Voltar, TotalContainer, PagamentoContainer } from './styles'
 function Carrinho() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const { cart, totalPrice } = useCartContext();
+  const { cart, totalPrice, purchase } = useCartContext();
   const {balance} = useContext(UserContext);
   const { paymentForm, paymentTypes, changePaymentForm } = usePaymentContext();
 
@@ -69,8 +69,9 @@ function Carrinho() {
         </div>
       </TotalContainer>
       <Button
-        disabled={totalCoast < 0}
+        disabled={totalCoast < 0 || cart.length === 0}
         onClick={() => {
+          purchase();
           setOpenSnackbar(true);
         }}
         color="primary"
