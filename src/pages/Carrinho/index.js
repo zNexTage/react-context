@@ -2,8 +2,9 @@ import { Button, Snackbar, InputLabel, Select, MenuItem } from '@material-ui/cor
 import MuiAlert from '@material-ui/lab/Alert';
 import { useCartContext } from 'commom/context/cart';
 import { usePaymentContext } from 'commom/context/payment';
+import { UserContext } from 'commom/context/user';
 import Produto from 'components/Produto';
-import { useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Voltar, TotalContainer, PagamentoContainer } from './styles';
 
@@ -11,9 +12,13 @@ function Carrinho() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const { cart, totalPrice } = useCartContext();
+  const {balance} = useContext(UserContext);
   const { paymentForm, paymentTypes, changePaymentForm } = usePaymentContext();
 
   const history = useHistory();
+
+  // the calculation will only happen when the cart balance or total price changes.
+  const totalCoast = useMemo(()=> balance - totalPrice, [balance, totalPrice]);
 
   const numberFormat = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL' });
 
@@ -56,14 +61,15 @@ function Carrinho() {
         </div>
         <div>
           <h2> Saldo: </h2>
-          <span> R$ </span>
+          <span>{numberFormat.format(balance)}</span>
         </div>
         <div>
           <h2> Saldo Total: </h2>
-          <span> R$ </span>
+          <span>{numberFormat.format(totalCoast)}</span>
         </div>
       </TotalContainer>
       <Button
+        disabled={totalCoast < 0}
         onClick={() => {
           setOpenSnackbar(true);
         }}
