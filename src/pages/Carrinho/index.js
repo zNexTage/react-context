@@ -10,10 +10,12 @@ import { Container, Voltar, TotalContainer, PagamentoContainer } from './styles'
 function Carrinho() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const { cart } = useCartContext();
+  const { cart, totalPrice } = useCartContext();
   const { paymentForm, paymentTypes, changePaymentForm } = usePaymentContext();
 
   const history = useHistory();
+
+  const numberFormat = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL' });
 
   return (
     <Container>
@@ -50,7 +52,7 @@ function Carrinho() {
       <TotalContainer>
         <div>
           <h2>Total no Carrinho: </h2>
-          <span>R$ </span>
+          <span>{numberFormat.format(totalPrice)}</span>
         </div>
         <div>
           <h2> Saldo: </h2>

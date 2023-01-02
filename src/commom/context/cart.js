@@ -6,6 +6,7 @@ CartContext.displayName = 'Carrinho de compras';
 const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [totalQtd, setTotalQtd] = useState(0);
+    const [totalPrice, setTotalPrice]= useState(0);
 
 
     /**
@@ -13,14 +14,21 @@ const CartProvider = ({ children }) => {
      * > o Provider vai ter a responsabilidade de prover o contexto e de fazer manutenção no contexto! Não necessariamente colocar as funções no Provider vai estar sempre errado, pois nem sempre o nosso contexto será gigantesco, porém se o contexto começar a ficar muito complexo, você promete que vai criar um hook para poder separar a responsabilidade, beleza? ;)
      */
     return (
-        <CartContext.Provider value={{ cart, setCart, totalQtd, setTotalQtd }}>
+        <CartContext.Provider value={{ 
+            cart, 
+            setCart, 
+            totalQtd, 
+            setTotalQtd,
+            totalPrice,
+            setTotalPrice 
+        }}>
             {children}
         </CartContext.Provider>
     )
 };
 
 const useCartContext = () => {
-    const { cart, setCart, totalQtd, setTotalQtd } = useContext(CartContext);
+    const { cart, setCart, totalQtd, setTotalQtd, setTotalPrice, totalPrice } = useContext(CartContext);
 
     /**
    * Add an item to the cart or, if the item is already in the cart, increase the 
@@ -90,14 +98,18 @@ const useCartContext = () => {
     }
 
     /**
-     * Calculate the quantity total of the items in cart.
+     * Calculate the quantity and price total of the items in cart.
      */
     useEffect(() => {
-        const totalQtd = cart.reduce((qtd, item) => {
-            return qtd + item.quantity;
-        }, 0);
+        const {totalQtd, totalPrice} = cart.reduce(({totalQtd, totalPrice}, item) => {
+            return {
+                totalQtd: totalQtd + item.quantity,
+                totalPrice: totalPrice + (item.value * item.quantity)
+            }
+        }, {totalQtd: 0, totalPrice: 0});
 
         setTotalQtd(totalQtd);
+        setTotalPrice(totalPrice);        
     }, [cart, setTotalQtd]);
 
 
@@ -107,6 +119,7 @@ const useCartContext = () => {
         getProduct,
         handleAddItem,
         totalQtd,
+        totalPrice,
         handleRemoveItem
     }
 }
