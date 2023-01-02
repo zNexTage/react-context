@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { usePaymentContext } from './payment';
 
 const CartContext = createContext();
 CartContext.displayName = 'Carrinho de compras';
@@ -29,6 +30,8 @@ const CartProvider = ({ children }) => {
 
 const useCartContext = () => {
     const { cart, setCart, totalQtd, setTotalQtd, setTotalPrice, totalPrice } = useContext(CartContext);
+
+    const { paymentForm } = usePaymentContext();
 
     /**
    * Add an item to the cart or, if the item is already in the cart, increase the 
@@ -109,8 +112,8 @@ const useCartContext = () => {
         }, {totalQtd: 0, totalPrice: 0});
 
         setTotalQtd(totalQtd);
-        setTotalPrice(totalPrice);        
-    }, [cart, setTotalQtd]);
+        setTotalPrice(totalPrice * paymentForm.fees);        
+    }, [cart, setTotalQtd, paymentForm]);
 
 
     return {
